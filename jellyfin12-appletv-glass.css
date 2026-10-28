@@ -1,0 +1,279 @@
+/* ============================================================
+   Jellyfin 12 → Apple TV / Liquid Glass theme
+   Paste into: Dashboard → General → Branding → Custom CSS
+   Targets BOTH the new MUI layout (default in v12) and the
+   legacy layout, so it still works if you switch layouts.
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+:root {
+  --font-apple: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+
+  --atv-text: #f5f5f7;
+  --atv-text-dim: rgba(245, 245, 247, 0.62);
+  --atv-accent: #0a84ff;
+
+  --glass-bg: rgba(255, 255, 255, 0.10);
+  --glass-bg-strong: rgba(255, 255, 255, 0.17);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-highlight: rgba(255, 255, 255, 0.45);
+  --glass-blur: blur(28px) saturate(180%);
+
+  --radius-card: 18px;
+  --radius-pill: 999px;
+  --ease-apple: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Fonts (incl. MUI components) ---------- */
+html, body, button, input, select, textarea,
+.MuiTypography-root, .MuiButton-root, .MuiTab-root, .MuiListItemText-root,
+.MuiInputBase-root, .MuiMenuItem-root, .MuiTooltip-tooltip,
+.emby-button, .emby-input, .emby-select, .emby-textarea,
+.listItemBodyText, .cardText, .sectionTitle, .itemName {
+  font-family: var(--font-apple) !important;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
+}
+
+/* ---------- Background ---------- */
+html, body, .skinBody, .backgroundContainer, .libraryPage, .page {
+  background-color: #000 !important;
+  color: var(--atv-text);
+}
+.backgroundContainer.withBackdrop {
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(10, 132, 255, 0.18), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, rgba(191, 90, 242, 0.14), transparent 60%),
+    #000 !important;
+}
+.backdropImage { filter: saturate(1.15) brightness(0.8); }
+
+/* ---------- Type scale ---------- */
+h1, .pageTitle { font-weight: 700; letter-spacing: -0.03em; }
+h2, .sectionTitle, .sectionTitle-cards {
+  font-weight: 700 !important;
+  font-size: 1.5em !important;
+  letter-spacing: -0.022em !important;
+}
+.itemName, .parentName { font-weight: 800; letter-spacing: -0.035em; }
+.secondaryText, .cardText-secondary, .listItemBodyText-secondary,
+.mediaInfoItem, .itemMiscInfo { color: var(--atv-text-dim) !important; }
+
+/* ---------- Top bar: floating glass (MUI + legacy) ---------- */
+.MuiAppBar-root,
+.skinHeader, .skinHeader-withBackground {
+  background: rgba(20, 20, 24, 0.45) !important;
+  background-image: none !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+/* ---------- Pill tabs (MUI + legacy) ---------- */
+.MuiTabs-root .MuiTabs-indicator,
+.headerTabs .emby-tab-button-active::after { display: none !important; }
+
+.MuiTab-root,
+.headerTabs .emby-tab-button {
+  border-radius: var(--radius-pill) !important;
+  min-height: 0 !important;
+  padding: 0.55em 1.2em !important;
+  margin: 0 0.15em;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  color: var(--atv-text-dim);
+  transition: background 0.3s var(--ease-apple), color 0.3s var(--ease-apple);
+}
+.MuiTab-root.Mui-selected,
+.headerTabs .emby-tab-button-active {
+  color: #fff !important;
+  background: var(--glass-bg-strong);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 1px var(--glass-border);
+}
+
+/* ---------- Side drawer: glass panel (MUI + legacy) ---------- */
+.MuiDrawer-paper,
+.mainDrawer {
+  background: rgba(24, 24, 28, 0.55) !important;
+  background-image: none !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.MuiDrawer-paper .MuiListItemButton-root,
+.navMenuOption {
+  margin: 2px 10px !important;
+  border-radius: 12px !important;
+  transition: background 0.25s var(--ease-apple);
+}
+.MuiDrawer-paper .MuiListItemButton-root:hover,
+.navMenuOption:hover { background: var(--glass-bg) !important; }
+.MuiDrawer-paper .MuiListItemButton-root.Mui-selected,
+.navMenuOption-selected {
+  background: var(--glass-bg-strong) !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* ---------- Posters / cards: Apple TV lift ---------- */
+.cardBox { padding: 0.5em; }
+.cardImageContainer, .cardScalable {
+  border-radius: var(--radius-card) !important;
+  overflow: hidden;
+}
+.cardScalable {
+  transition: transform 0.45s var(--ease-apple), box-shadow 0.45s var(--ease-apple);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  will-change: transform;
+}
+.card:hover .cardScalable,
+.card:focus-visible .cardScalable,
+.cardBox:focus-within .cardScalable {
+  transform: scale(1.07) translateY(-4px);
+  box-shadow: 0 28px 50px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.18);
+  z-index: 5;
+}
+.cardOverlayContainer { background: rgba(0, 0, 0, 0.25) !important; backdrop-filter: blur(6px); }
+.cardImageContainer::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 40%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-apple);
+  pointer-events: none;
+}
+.card:hover .cardImageContainer::after { opacity: 1; }
+.cardText { font-weight: 500; }
+
+/* ---------- Buttons ---------- */
+.btnPlay, .btnResume, .emby-button.button-submit,
+.MuiButton-containedPrimary {
+  border-radius: var(--radius-pill) !important;
+  padding: 0.7em 1.6em;
+  font-weight: 600;
+  background: #fff !important;
+  color: #000 !important;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s var(--ease-apple), box-shadow 0.3s var(--ease-apple);
+}
+.btnPlay:hover, .btnResume:hover, .emby-button.button-submit:hover,
+.MuiButton-containedPrimary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(255, 255, 255, 0.25);
+}
+
+.detailButton, .btnToggleFavorite, .btnPlaystate, .btnMoreCommands,
+.MuiButton-outlined, .MuiButton-text {
+  border-radius: var(--radius-pill) !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 1px var(--glass-border),
+    0 6px 18px rgba(0, 0, 0, 0.3);
+  border-color: transparent !important;
+  color: #fff;
+  transition: background 0.3s var(--ease-apple), transform 0.3s var(--ease-apple);
+}
+.detailButton:hover, .MuiButton-outlined:hover, .MuiButton-text:hover {
+  background: var(--glass-bg-strong) !important;
+  transform: scale(1.06);
+}
+
+/* ---------- Inputs / search ---------- */
+.emby-input, .emby-textarea, .emby-select, .searchfields-txtSearch,
+.MuiOutlinedInput-root, .MuiFilledInput-root {
+  background: var(--glass-bg) !important;
+  border-radius: 14px !important;
+  color: #fff;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.emby-input, .emby-textarea, .emby-select, .searchfields-txtSearch {
+  border: 1px solid var(--glass-border) !important;
+}
+.MuiOutlinedInput-notchedOutline { border-color: var(--glass-border) !important; }
+.emby-input:focus, .emby-textarea:focus, .emby-select:focus,
+.MuiOutlinedInput-root.Mui-focused {
+  border-color: var(--atv-accent) !important;
+  box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.25);
+}
+
+/* ---------- Dialogs / menus / popovers ---------- */
+.dialog, .actionSheetContent, .formDialogContent,
+.MuiDialog-paper, .MuiMenu-paper, .MuiPopover-paper {
+  background: rgba(32, 32, 38, 0.6) !important;
+  background-image: none !important;
+  backdrop-filter: blur(40px) saturate(190%);
+  -webkit-backdrop-filter: blur(40px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px !important;
+  box-shadow: inset 0 1px 0 var(--glass-highlight), 0 30px 80px rgba(0, 0, 0, 0.6) !important;
+}
+.actionSheetMenuItem, .MuiMenuItem-root { border-radius: 10px !important; margin: 2px 6px !important; }
+.actionSheetMenuItem:hover, .MuiMenuItem-root:hover { background: var(--glass-bg-strong) !important; }
+
+/* ---------- Item detail page ---------- */
+.detailPagePrimaryContainer, .detailRibbon { background: transparent !important; }
+.detailImageContainer .cardImageContainer, .itemDetailImage {
+  border-radius: 20px !important;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7);
+}
+.itemBackdrop { mask-image: linear-gradient(to bottom, #000 40%, transparent 100%); }
+.mediaInfoOfficialRating, .mediaInfoItem:not(.mediaInfoText) {
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 0.15em 0.7em;
+}
+
+/* ---------- Progress bars ---------- */
+.itemProgressBar, .innerCardFooter .itemProgressBar {
+  height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2);
+}
+.itemProgressBarForeground { background: #fff !important; border-radius: 4px; }
+
+/* ---------- Video OSD ---------- */
+.videoOsdBottom, .osdControls {
+  background: linear-gradient(to top, rgba(0,0,0,0.75), transparent) !important;
+}
+.osdControls .paper-icon-button-light, .osdControls .MuiIconButton-root {
+  border-radius: 50%;
+  transition: background 0.25s var(--ease-apple), transform 0.25s var(--ease-apple);
+}
+.osdControls .paper-icon-button-light:hover, .osdControls .MuiIconButton-root:hover {
+  background: var(--glass-bg-strong);
+  transform: scale(1.1);
+}
+.sliderBubble {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  border-radius: 10px;
+}
+
+/* ---------- Scrollbars ---------- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); background-clip: padding-box; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  .card:hover .cardScalable { transform: none; }
+}
+
+/* ---------- No backdrop-filter fallback ---------- */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .MuiAppBar-root, .skinHeader, .MuiDrawer-paper, .mainDrawer,
+  .dialog, .actionSheetContent, .MuiDialog-paper, .MuiMenu-paper, .MuiPopover-paper {
+    background: rgba(28, 28, 32, 0.96) !important;
+  }
+}
